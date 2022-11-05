@@ -6,11 +6,29 @@
 /*   By: ogorfti <ogorfti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:24:31 by ogorfti           #+#    #+#             */
-/*   Updated: 2022/11/04 17:23:13 by ogorfti          ###   ########.fr       */
+/*   Updated: 2022/11/05 20:07:52 by ogorfti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+char	*ft_strchr(char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] != (char)c)
+	{
+		if (s[i] == '\0')
+		{
+			return (0);
+		}
+		i++;
+	}
+	return ((char *)&s[i]);
+}
 
 char	*new_backup(char *oldline)
 {
@@ -77,7 +95,7 @@ char	*ft_join(int fd, char *joiner)
 	int		i;
 
 	if (!joiner)
-		joiner = calloc(1, 1);
+		joiner = ft_calloc(1, 1);
 	i = 0;
 	checker = 1;
 	buffer = malloc(BUFFER_SIZE + 1);

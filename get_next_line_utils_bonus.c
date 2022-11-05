@@ -6,7 +6,7 @@
 /*   By: ogorfti <ogorfti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/29 13:24:28 by ogorfti           #+#    #+#             */
-/*   Updated: 2022/11/04 17:23:02 by ogorfti          ###   ########.fr       */
+/*   Updated: 2022/11/05 20:06:13 by ogorfti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,6 @@ size_t	ft_strlen(char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
-}
-
-char	*ft_strchr(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != (char)c)
-	{
-		if (s[i] == '\0')
-		{
-			return (0);
-		}
-		i++;
-	}
-	return ((char *)&s[i]);
 }
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -79,4 +61,35 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	free (s1);
 	return (res);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = '\0';
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	size_t	i;
+	void	*ptr;
+
+	i = 0;
+	if (count >= SIZE_MAX && size >= SIZE_MAX)
+		return (NULL);
+	ptr = malloc(count * size);
+	if (!ptr)
+		return (NULL);
+	else
+	{
+		ft_bzero(ptr, count * size);
+		return (ptr);
+	}
+	return (0);
 }
