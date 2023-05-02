@@ -5,91 +5,74 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogorfti <ogorfti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/29 13:24:28 by ogorfti           #+#    #+#             */
-/*   Updated: 2022/11/05 20:06:13 by ogorfti          ###   ########.fr       */
+/*   Created: 2022/11/07 12:14:13 by ogorfti           #+#    #+#             */
+/*   Updated: 2022/11/09 16:31:37 by ogorfti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	if (!s)
 		return (0);
-	while (s[i] != '\0')
+	while (s[i])
 		i++;
 	return (i);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+char	*ft_strchr(char *s, char c)
 {
-	size_t	i;
-	char	*cnv_d;
-	char	*cnv_s;
+	int	i;
 
-	cnv_d = dst;
-	cnv_s = (void *)src;
 	i = 0;
-	if (cnv_d == NULL && cnv_s == NULL)
-		return (NULL);
-	while (i < n)
+	while (s[i] != c)
 	{
-		cnv_d[i] = cnv_s[i];
+		if (s[i] == '\0')
+			return (NULL);
 		i++;
 	}
-	return (cnv_d);
+	return (&s[i]);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*res;
-	size_t	len_s1;
-	size_t	len_s2;
-
-	if (!s1 || !s2)
-		return (NULL);
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	res = malloc(len_s2 + len_s1 + 1);
-	if (res)
-	{
-		ft_memcpy(res, s1, len_s1);
-		ft_memcpy(res + len_s1, s2, len_s2 + 1);
-	}
-	free (s1);
-	return (res);
-}
-
-void	ft_bzero(void *s, size_t n)
+void	*ft_calloc(size_t nitems, size_t size)
 {
 	size_t	i;
+	char	*arr;
 
 	i = 0;
-	while (i < n)
+	if (nitems >= SIZE_MAX || size >= SIZE_MAX)
+		return (NULL);
+	arr = malloc(nitems * size);
+	if (!arr)
+		return (NULL);
+	while (i < nitems * size)
+		arr[i++] = '\0';
+	return (arr);
+}
+
+char	*ft_strjoin(char *str1, char *str2)
+{
+	char	*join;
+	int		i;
+	int		j;
+
+	i = 0;
+	if (!str1 || !str2)
+		return (NULL);
+	join = malloc(ft_strlen (str1) + ft_strlen (str2) + 1);
+	while (str1[i])
 	{
-		((char *)s)[i] = '\0';
+		join[i] = str1[i];
 		i++;
 	}
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	size_t	i;
-	void	*ptr;
-
-	i = 0;
-	if (count >= SIZE_MAX && size >= SIZE_MAX)
-		return (NULL);
-	ptr = malloc(count * size);
-	if (!ptr)
-		return (NULL);
-	else
-	{
-		ft_bzero(ptr, count * size);
-		return (ptr);
-	}
-	return (0);
+	j = 0;
+	while (str2[j])
+		join[i++] = str2[j++];
+	join[i] = '\0';
+	free (str1);
+	return (join);
 }

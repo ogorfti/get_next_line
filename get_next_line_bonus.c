@@ -5,34 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogorfti <ogorfti@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/29 13:24:31 by ogorfti           #+#    #+#             */
-/*   Updated: 2022/11/05 20:07:52 by ogorfti          ###   ########.fr       */
+/*   Created: 2022/11/07 12:13:12 by ogorfti           #+#    #+#             */
+/*   Updated: 2022/11/09 16:30:16 by ogorfti          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*ft_strchr(char *s, int c)
+char	*get_line_nope(char *oldline)
 {
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != (char)c)
-	{
-		if (s[i] == '\0')
-		{
-			return (0);
-		}
-		i++;
-	}
-	return ((char *)&s[i]);
-}
-
-char	*new_backup(char *oldline)
-{
-	char	*new_backup;
+	char	*newline;
 	int		i;
 	int		j;
 
@@ -40,107 +22,84 @@ char	*new_backup(char *oldline)
 	j = 0;
 	while (oldline[i] != '\n' && oldline[i])
 		i++;
-	if (!oldline[i])
+	if (oldline[i] == '\n')
+		i++;
+	newline = malloc (i + 1);
+	while (j < i)
 	{
-		free(oldline);
-		return (NULL);
+		newline[j] = oldline[j];
+		j++;
 	}
-	i++;
-	new_backup = malloc(ft_strlen(oldline) - i + 1);
-	if (!new_backup)
+	newline[j] = '\0';
+	if (*newline == 0)
 	{
-		free (oldline);
-		return (NULL);
+		free (newline);
+		return (0);
 	}
-	while (oldline[i])
-		new_backup[j++] = oldline[i++];
-	new_backup[j] = '\0';
-	free(oldline);
-	return (new_backup);
+	return (newline);
 }
 
-char	*get_befor_line(char *s)
+char	*get_shyata(char *line)
 {
-	char	*arr;
-	int		i;
+	char	*shyata;
 	int		j;
+	int		i;
 
 	i = 0;
 	j = 0;
-	while (s[i] != '\n' && s[i])
+	while (line[i] && line[i] != '\n')
 		i++;
-	if (s[i] == '\n')
-		i++;
-	arr = malloc(i + 2);
-	if (!arr)
+	if (line[i] != '\n')
+	{
+		free(line);
 		return (NULL);
-	while (j < i)
+	}
+	i++;
+	shyata = malloc(ft_strlen(line) - i + 1);
+	while (line[i])
 	{
-		arr[j] = s[j];
+		shyata[j] = line[i];
 		j++;
+		i++;
 	}
-	arr[j] = '\0';
-	if (*arr == '\0')
-	{
-		free (arr);
-		arr = NULL;
-	}
-	return (arr);
+	shyata[j] = '\0';
+	free (line);
+	return (shyata);
 }
 
-char	*ft_join(int fd, char *joiner)
+char	*get_line_with_shyata(int fd, char *joiner)
 {
 	char	*buffer;
 	int		checker;
-	int		i;
 
+	checker = 1;
 	if (!joiner)
 		joiner = ft_calloc(1, 1);
-	i = 0;
-	checker = 1;
 	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (0);
 	while (checker != 0)
 	{
 		checker = read(fd, buffer, BUFFER_SIZE);
-		if (checker == -1)
+		if (checker <= 0)
 			break ;
 		buffer[checker] = '\0';
 		joiner = ft_strjoin(joiner, buffer);
 		if (ft_strchr(joiner, '\n'))
 			break ;
 	}
-	free(buffer);
+	free (buffer);
 	return (joiner);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*curr;
+	static char	*shyata[OPEN_MAX];
 	char		*line;
-	static char	*backup[OPEN_MAX];
+	char		*oldline;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	curr = ft_join(fd, backup[fd]);
-	if (!curr)
 		return (NULL);
-	line = get_befor_line(curr);
-	backup[fd] = new_backup(curr);
+	oldline = get_line_with_shyata(fd, shyata[fd]);
+	line = get_line_nope(oldline);
+	shyata[fd] = get_shyata(oldline);
 	return (line);
 }
-
-// int main()
-// {
-// 	int fd;
-
-// 	fd = open("fd.txt", O_RDONLY);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// }
