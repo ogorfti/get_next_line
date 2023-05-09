@@ -1,3 +1,11 @@
+<p align="center">
+	<b><i>This is my get_next_line project from the 42 cursus</i></b><br>
+</p>
+
+<div align="center">
+  <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="animated" />
+</div>
+
 ## 🗣️ About
 
 > It's the second project at 1337. It involved creating a function in C that reads a line from a file descriptor, making it an efficient way to read large files where the size is not known. This project helped me gain experience in memory optimization and file handling, and the resulting function has proven to be a valuable tool for my future programming projects.
